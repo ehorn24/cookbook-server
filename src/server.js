@@ -1,9 +1,15 @@
-const express = require("express");
+const knex = require("knex");
 const cors = require("cors");
-const app = express();
+const app = require("./app");
 const { CLIENT_ORIGIN } = require("./config");
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
+const DB_URL = process.env.DB_URL;
+
+const db = knex({
+  client: "pg",
+  connection: DB_URL
+});
 
 app.use(
   cors({
@@ -11,10 +17,6 @@ app.use(
   })
 );
 
-app.get("/api/*", (req, res) => {
-  res.json({ ok: true });
-});
+app.set("db", db);
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
-
-module.exports = { app };
