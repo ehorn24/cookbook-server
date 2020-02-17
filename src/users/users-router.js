@@ -29,9 +29,27 @@ usersRouter
     }
     UsersService.createNewUser(knexInstance, newUser)
       .then(user => {
-        res.status(201).json(user);
+        res
+          .status(201)
+          .location(path.posix.join(req.originalUrl, `/${user.id}`))
+          .json(user);
       })
       .catch(next);
   });
+
+usersRouter.route("/:username").get((req, res, next) => {
+  const knexInstance = req.app.get("db");
+  UsersService.getUserById(knexInstance, req.params.username)
+    .then(user => {
+      if (!user) {
+        return res.status(404).json({
+          error: { message: "User doesn't exist" }
+        });
+      }
+      res.json(user);
+      next();
+    })
+    .catch(next);
+});
 
 module.exports = usersRouter;

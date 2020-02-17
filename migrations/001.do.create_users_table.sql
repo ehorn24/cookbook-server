@@ -3,5 +3,6 @@ CREATE TABLE users (
   firstname TEXT NOT NULL,
   lastname TEXT NOT NULL,
   username TEXT NOT NULL UNIQUE,
-  password TEXT NOT NULL
+  password TEXT NOT NULL,
+  token TEXT
 )
