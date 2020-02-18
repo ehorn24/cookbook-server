@@ -16,23 +16,23 @@ const UsersService = {
       });
   },
 
-  getByUsername(knex, username) {
+  getByUsername(knex, id) {
     return knex
       .from("users")
       .select("*")
-      .where("username", username)
+      .where("id", id)
       .first();
   },
 
-  updateUser(knex, username, newUserFields) {
+  updateUser(knex, id, newUserFields) {
     return knex("users")
-      .where({ username })
+      .where({ id })
       .update(newUserFields);
   },
 
-  deleteUser(knex, username) {
+  deleteUser(knex, id) {
     return knex("users")
-      .where({ username })
+      .where({ id })
       .delete();
   }
 };

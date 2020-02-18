@@ -31,17 +31,17 @@ usersRouter
       .then(user => {
         res
           .status(201)
-          .location(path.posix.join(req.originalUrl, `/${user.id}`))
+          .location(path.posix.join(req.originalUrl, `/${user.username}`))
           .json(user);
       })
       .catch(next);
   });
 
 usersRouter
-  .route("/:username")
+  .route("/:user_id")
   .all((req, res, next) => {
     knexInstance = req.app.get("db");
-    UsersService.getByUsername(knexInstance, req.params.username)
+    UsersService.getByUsername(knexInstance, req.params.user_id)
       .then(user => {
         if (!user) {
           return res.status(404).json({
@@ -58,7 +58,7 @@ usersRouter
   })
   .delete((req, res, next) => {
     knexInstance = req.app.get("db");
-    UsersService.deleteUser(knexInstance, req.params.username)
+    UsersService.deleteUser(knexInstance, req.params.user_id)
       .then(numRowsAffected => {
         res.status(204).end();
       })
@@ -76,7 +76,7 @@ usersRouter
         }
       });
     }
-    UsersService.updateUser(knexInstance, req.params.username, userToUpdate)
+    UsersService.updateUser(knexInstance, req.params.user_id, userToUpdate)
       .then(numRowsAffected => {
         res.status(204).end();
       })
