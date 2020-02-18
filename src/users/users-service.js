@@ -16,12 +16,24 @@ const UsersService = {
       });
   },
 
-  getUserByUsername(knex, username) {
+  getByUsername(knex, username) {
     return knex
       .from("users")
       .select("*")
       .where("username", username)
       .first();
+  },
+
+  updateUser(knex, username, newUserFields) {
+    return knex("users")
+      .where({ username })
+      .update(newUserFields);
+  },
+
+  deleteUser(knex, username) {
+    return knex("users")
+      .where({ username })
+      .delete();
   }
 };
 
