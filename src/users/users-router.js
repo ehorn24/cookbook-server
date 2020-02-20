@@ -1,6 +1,7 @@
 const path = require("path");
 const express = require("express");
 const UsersService = require("./users-service");
+const JSRSASign = require("jsrsasign");
 
 const usersRouter = express.Router();
 const jsonParser = express.json();
@@ -36,6 +37,30 @@ usersRouter
       })
       .catch(next);
   });
+
+usersRouter.route("/login").post(jsonParser, (req, res, next) => {
+  // res.body.username & password
+  // check if user name and password are matching.
+  // if they are not matching, send error.
+  if (false) {
+    res.status(401).json({
+      message: "Invalid credentials",
+      success: false
+    });
+  } else {
+    const header = JSON.stringify({
+      alg: "HS512",
+      typ: "JWT"
+    });
+    const claims = JSON.stringify({
+      username: req.body.username
+    });
+    const key = "E!!aIs$oGood@C0ding";
+    const sJWT = JSRSASign.jws.JWS.sign("HS512", header, claims, key);
+    console.log(sJWT);
+    res.json(sJWT);
+  }
+});
 
 usersRouter
   .route("/:user_id")

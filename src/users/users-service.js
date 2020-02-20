@@ -1,3 +1,5 @@
+const JSRSASign = require("jsrsasign");
+
 const UsersService = {
   getAllUsers(knex) {
     return knex.select("*").from("users");
