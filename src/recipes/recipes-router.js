@@ -17,8 +17,20 @@ recipesRouter
   })
   .post(jsonParser, (req, res, next) => {
     const knexInstance = req.app.get("db");
-    const { username, recipename, ingredients, instructions } = req.body;
-    const newRecipe = { username, recipename, ingredients, instructions };
+    const {
+      username,
+      recipename,
+      recipephoto,
+      ingredients,
+      instructions
+    } = req.body;
+    const newRecipe = {
+      username,
+      recipename,
+      recipephoto,
+      ingredients,
+      instructions
+    };
     for (const [key, value] of Object.entries(newRecipe)) {
       if (value == null) {
         return res.status(400).json({
@@ -39,7 +51,7 @@ recipesRouter
 recipesRouter
   .route("/:recipe_id")
   .all((req, res, next) => {
-    knexInstance = req.app.get("db");
+    const knexInstance = req.app.get("db");
     RecipesService.getByRecipename(knexInstance, req.params.recipe_id)
       .then(recipe => {
         if (!recipe) {
@@ -56,7 +68,7 @@ recipesRouter
     res.json(res.recipe);
   })
   .delete((req, res, next) => {
-    knexInstance = req.app.get("db");
+    const knexInstance = req.app.get("db");
     RecipesService.deleteRecipe(knexInstance, req.params.recipe_id)
       .then(numRowsAffected => {
         res.status(204).end();
@@ -64,8 +76,15 @@ recipesRouter
       .catch(next);
   })
   .patch(jsonParser, (req, res, next) => {
+    const knexInstance = req.app.get("db");
     const { username, recipename, ingredients, instructions } = req.body;
-    const recipeToUpdate = { username, recipename, ingredients, instructions };
+    const recipeToUpdate = {
+      username,
+      recipename,
+      recipephoto,
+      ingredients,
+      instructions
+    };
     const numberOfValues = Object.values(recipeToUpdate).filter(Boolean).length;
     if (numberOfValues === 0) {
       return res.status(400).json({

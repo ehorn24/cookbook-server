@@ -4,5 +4,6 @@ CREATE TABLE users (
   lastname TEXT NOT NULL,
   username TEXT NOT NULL UNIQUE,
   password TEXT NOT NULL,
-  token TEXT
+  profilepicture TEXT NOT NULL,
+  profilebio TEXT
 )

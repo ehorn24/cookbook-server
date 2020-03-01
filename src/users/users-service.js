@@ -1,5 +1,3 @@
-const JSRSASign = require("jsrsasign");
-
 const UsersService = {
   getAllUsers(knex) {
     return knex.select("*").from("users");
@@ -15,11 +13,27 @@ const UsersService = {
       });
   },
 
-  getByUsername(knex, id) {
+  getById(knex, id) {
     return knex
       .from("users")
       .select("*")
-      .where("id", id)
+      .where({ id })
+      .first();
+  },
+
+  getByUsername(knex, username) {
+    return knex
+      .from("users")
+      .select("*")
+      .where({ username })
+      .first();
+  },
+
+  authUser(knex, username) {
+    return knex
+      .from("users")
+      .select("*")
+      .where({ username })
       .first();
   },
 
