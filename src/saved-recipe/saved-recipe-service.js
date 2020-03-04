@@ -1,4 +1,7 @@
-const SavedRecipesService = {
+const SavedRecipeService = {
+  getAllSavedRecipes(knex) {
+    return knex.select("*").from("saved_recipes");
+  },
   getRecipesForUser(knex, username) {
     return knex
       .select("*")
@@ -24,4 +27,4 @@ const SavedRecipesService = {
   }
 };
 
-module.exports = SavedRecipesService;
+module.exports = SavedRecipeService;

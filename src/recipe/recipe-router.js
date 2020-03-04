@@ -1,15 +1,15 @@
 const path = require("path");
 const express = require("express");
-const RecipesService = require("./recipes-service");
+const RecipeService = require("./recipe-service");
 
-const recipesRouter = express.Router();
+const recipeRouter = express.Router();
 const jsonParser = express.json();
 
-recipesRouter
+recipeRouter
   .route("/")
   .get((req, res, next) => {
     const knexInstance = req.app.get("db");
-    RecipesService.getAllRecipes(knexInstance)
+    RecipeService.getAllRecipes(knexInstance)
       .then(recipes => {
         res.json(recipes);
       })
@@ -17,19 +17,13 @@ recipesRouter
   })
   .post(jsonParser, (req, res, next) => {
     const knexInstance = req.app.get("db");
-    const {
-      username,
-      recipename,
-      recipephoto,
-      ingredients,
-      instructions
-    } = req.body;
+    const { username, recipename, recipephoto, ingredients, steps } = req.body;
     const newRecipe = {
       username,
       recipename,
       recipephoto,
       ingredients,
-      instructions
+      steps
     };
     for (const [key, value] of Object.entries(newRecipe)) {
       if (value == null) {
@@ -38,7 +32,7 @@ recipesRouter
         });
       }
     }
-    RecipesService.createNewRecipe(knexInstance, newRecipe)
+    RecipeService.createNewRecipe(knexInstance, newRecipe)
       .then(recipe => {
         res
           .status(201)
@@ -48,11 +42,11 @@ recipesRouter
       .catch(next);
   });
 
-recipesRouter
+recipeRouter
   .route("/:recipe_id")
   .all((req, res, next) => {
     const knexInstance = req.app.get("db");
-    RecipesService.getByRecipename(knexInstance, req.params.recipe_id)
+    RecipeService.getByRecipename(knexInstance, req.params.recipe_id)
       .then(recipe => {
         if (!recipe) {
           return res.status(404).json({
@@ -69,7 +63,7 @@ recipesRouter
   })
   .delete((req, res, next) => {
     const knexInstance = req.app.get("db");
-    RecipesService.deleteRecipe(knexInstance, req.params.recipe_id)
+    RecipeService.deleteRecipe(knexInstance, req.params.recipe_id)
       .then(numRowsAffected => {
         res.status(204).end();
       })
@@ -77,10 +71,10 @@ recipesRouter
   })
   .patch(jsonParser, (req, res, next) => {
     const knexInstance = req.app.get("db");
-    const { username, recipename, ingredients, instructions } = req.body;
+    const { recipename, recipephoto, ingredients, instructions } = req.body;
     const recipeToUpdate = {
-      username,
       recipename,
+      recipephoto,
       recipephoto,
       ingredients,
       instructions
@@ -90,11 +84,11 @@ recipesRouter
       return res.status(400).json({
         error: {
           message:
-            "Request body must contain either username, recipename, ingredients, or instructions."
+            "Request body must contain either recipename, recipephoto, ingredients, or instructions."
         }
       });
     }
-    RecipesService.updateRecipe(
+    RecipeService.updateRecipe(
       knexInstance,
       req.params.recipe_id,
       recipeToUpdate
@@ -105,4 +99,4 @@ recipesRouter
       .catch(next);
   });
 
-module.exports = recipesRouter;
+module.exports = recipeRouter;

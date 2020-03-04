@@ -1,4 +1,4 @@
-const RecipesService = {
+const RecipeService = {
   getAllRecipes(knex) {
     return knex.select("*").from("recipes");
   },
@@ -34,4 +34,4 @@ const RecipesService = {
   }
 };
 
-module.exports = RecipesService;
+module.exports = RecipeService;

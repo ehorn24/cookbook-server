@@ -1,4 +1,4 @@
-const UsersService = {
+const UserService = {
   getAllUsers(knex) {
     return knex.select("*").from("users");
   },
@@ -50,4 +50,4 @@ const UsersService = {
   }
 };
 
-module.exports = UsersService;
+module.exports = UserService;

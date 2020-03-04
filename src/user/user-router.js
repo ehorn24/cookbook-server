@@ -1,16 +1,16 @@
 const path = require("path");
 const express = require("express");
-const UsersService = require("./users-service");
+const UserService = require("./user-service");
 const md5 = require("md5");
 
-const usersRouter = express.Router();
+const userRouter = express.Router();
 const jsonParser = express.json();
 
-usersRouter
+userRouter
   .route("/")
   .get((req, res, next) => {
     const knexInstance = req.app.get("db");
-    UsersService.getAllUsers(knexInstance)
+    UserService.getAllUsers(knexInstance)
       .then(users => {
         res.json(users);
       })
@@ -41,7 +41,7 @@ usersRouter
         });
       }
     }
-    UsersService.createNewUser(knexInstance, newUser)
+    UserService.createNewUser(knexInstance, newUser)
       .then(user => {
         res
           .status(201)
@@ -51,12 +51,12 @@ usersRouter
       .catch(next);
   });
 
-usersRouter.route("/login").post(jsonParser, (req, res, next) => {
+userRouter.route("/login").post(jsonParser, (req, res, next) => {
   knexInstance = req.app.get("db");
   const username = req.body.username;
   const password = req.body.password;
   const retUser = { username, password: md5(password) };
-  UsersService.authUser(knexInstance, retUser.username)
+  UserService.authUser(knexInstance, retUser.username)
     .then(user => {
       if (!user) {
         res.status(404).json({
@@ -76,11 +76,11 @@ usersRouter.route("/login").post(jsonParser, (req, res, next) => {
     .catch(next);
 });
 
-usersRouter
+userRouter
   .route("/:user_id")
   .all((req, res, next) => {
     const knexInstance = req.app.get("db");
-    UsersService.getById(knexInstance, req.params.user_id)
+    UserService.getById(knexInstance, req.params.user_id)
       .then(user => {
         if (!user) {
           return res.status(404).json({
@@ -97,7 +97,7 @@ usersRouter
   })
   .delete((req, res, next) => {
     const knexInstance = req.app.get("db");
-    UsersService.deleteUser(knexInstance, req.params.user_id)
+    UserService.deleteUser(knexInstance, req.params.user_id)
       .then(numRowsAffected => {
         res.status(204).end();
       })
@@ -131,11 +131,11 @@ usersRouter
         }
       });
     }
-    UsersService.updateUser(knexInstance, req.params.user_id, userToUpdate)
+    UserService.updateUser(knexInstance, req.params.user_id, userToUpdate)
       .then(() => {
         res.status(204).end();
       })
       .catch(next);
   });
 
-module.exports = usersRouter;
+module.exports = userRouter;
