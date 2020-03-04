@@ -12,7 +12,7 @@ userRouter
     const knexInstance = req.app.get("db");
     UserService.getAllUsers(knexInstance)
       .then(users => {
-        res.json(users);
+        res.json(users).status(200);
       })
       .catch(next);
   })
