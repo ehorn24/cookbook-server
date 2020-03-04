@@ -7,15 +7,3 @@ describe("App", () => {
       .expect(200, "Hello, world!");
   });
 });
-
-describe("/user endpoint", () => {
-  it("returns an array of users", () => {
-    return supertest(app)
-      .get("/api/user")
-      .expect(200)
-      .expect("Content-Type", /json/)
-      .then(res => {
-        expect(res.body).to.be.an("array");
-      });
-  });
-});
