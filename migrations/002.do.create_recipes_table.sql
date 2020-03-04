@@ -4,5 +4,5 @@ CREATE TABLE recipes (
   recipename TEXT NOT NULL,
   recipephoto TEXT NOT NULL,
   ingredients TEXT[] NOT NULL,
-  instructions TEXT[] NOT NULL
+  steps TEXT[] NOT NULL
 )
