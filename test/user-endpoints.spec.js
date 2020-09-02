@@ -1,5 +1,4 @@
 const { expect } = require("chai");
-const knex = require("knex");
 const app = require("../src/app");
 const supertest = require("supertest");
 
@@ -89,13 +88,13 @@ describe("POST /login", () => {
 
 describe("GET /:user_id", () => {
   it("should return 404 if the user does not exist", () => {
-    let query = { key: "nonexistentuser" };
+    let query = { key: "10" };
     return supertest(app)
       .get(`/api/user/${query}`)
       .expect(404, "User doesn't exist");
   });
   it("should return an array of the user info", () => {
-    let query = { key: "testuser1" };
+    let query = { key: "10" };
     return supertest(app)
       .get(`/api/user/${query}`)
       .expect("Content-Type", /json/)
@@ -107,7 +106,7 @@ describe("GET /:user_id", () => {
 
 describe("DELETE /:user_id", () => {
   it("should return 204 if user is successfully deleted", () => {
-    let query = { key: "testuser2" };
+    let query = { key: "11" };
     return supertest(app).delete(`/api/user/${query}`).send(data).expect(204);
   });
 });
