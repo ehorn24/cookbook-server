@@ -11,7 +11,7 @@ userRouter
   .get((req, res, next) => {
     const knexInstance = req.app.get("db");
     UserService.getAllUsers(knexInstance)
-      .then(users => {
+      .then((users) => {
         res.json(users).status(200);
       })
       .catch(next);
@@ -24,7 +24,7 @@ userRouter
       username,
       password,
       profilepicture,
-      profilebio
+      profilebio,
     } = req.body;
     const newUser = {
       firstname,
@@ -32,17 +32,17 @@ userRouter
       username,
       password: md5(password),
       profilepicture,
-      profilebio
+      profilebio,
     };
     for (const [key, value] of Object.entries(newUser)) {
       if (value == null) {
         return res.status(400).json({
-          error: { message: `Missing ${key} from request body` }
+          error: { message: `Missing ${key} from request body` },
         });
       }
     }
     UserService.createNewUser(knexInstance, newUser)
-      .then(user => {
+      .then((user) => {
         res
           .status(201)
           .location(path.posix.join(req.originalUrl, `/${user.username}`))
@@ -57,10 +57,10 @@ userRouter.route("/login").post(jsonParser, (req, res, next) => {
   const password = req.body.password;
   const retUser = { username, password: md5(password) };
   UserService.authUser(knexInstance, retUser.username)
-    .then(user => {
+    .then((user) => {
       if (!user) {
         res.status(404).json({
-          message: "User doesn't exist"
+          message: "User doesn't exist",
         });
       } else if (
         user.username === retUser.username &&
@@ -69,7 +69,7 @@ userRouter.route("/login").post(jsonParser, (req, res, next) => {
         res.json("OK");
       } else {
         res.status(404).json({
-          message: "Invalid credentials."
+          message: "Invalid credentials.",
         });
       }
     })
@@ -81,10 +81,10 @@ userRouter
   .all((req, res, next) => {
     const knexInstance = req.app.get("db");
     UserService.getById(knexInstance, req.params.user_id)
-      .then(user => {
+      .then((user) => {
         if (!user) {
           return res.status(404).json({
-            error: { message: "User doesn't exist" }
+            error: { message: "User doesn't exist" },
           });
         }
         res.user = user;
@@ -98,7 +98,7 @@ userRouter
   .delete((req, res, next) => {
     const knexInstance = req.app.get("db");
     UserService.deleteUser(knexInstance, req.params.user_id)
-      .then(numRowsAffected => {
+      .then((numRowsAffected) => {
         res.status(204).end();
       })
       .catch(next);
@@ -111,7 +111,7 @@ userRouter
       username,
       password,
       profilepicture,
-      profilebio
+      profilebio,
     } = req.body;
     const userToUpdate = {
       firstname: firstname !== "" ? firstname : undefined,
@@ -119,7 +119,7 @@ userRouter
       username: username !== "" ? username : undefined,
       password: password ? md5(password) : undefined,
       profilepicture: profilepicture !== "" ? profilepicture : undefined,
-      profilebio: profilebio !== "" ? profilebio : undefined
+      profilebio: profilebio !== "" ? profilebio : undefined,
     };
 
     const numberOfValues = Object.values(userToUpdate).filter(Boolean).length;
@@ -127,8 +127,8 @@ userRouter
       return res.status(400).json({
         error: {
           message:
-            "Request body must contain either first name, last name, username, password, or picture"
-        }
+            "Request body must contain either first name, last name, username, password, or picture",
+        },
       });
     }
     UserService.updateUser(knexInstance, req.params.user_id, userToUpdate)
