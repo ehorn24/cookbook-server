@@ -10,7 +10,7 @@ recipeRouter
   .get((req, res, next) => {
     const knexInstance = req.app.get("db");
     RecipeService.getAllRecipes(knexInstance)
-      .then(recipes => {
+      .then((recipes) => {
         res.json(recipes);
       })
       .catch(next);
@@ -23,17 +23,17 @@ recipeRouter
       recipename,
       recipephoto,
       ingredients,
-      steps
+      steps,
     };
     for (const [key, value] of Object.entries(newRecipe)) {
       if (value == null) {
         return res.status(400).json({
-          error: { message: `Missing ${key} from request body` }
+          error: { message: `Missing ${key} from request body` },
         });
       }
     }
     RecipeService.createNewRecipe(knexInstance, newRecipe)
-      .then(recipe => {
+      .then((recipe) => {
         res
           .status(201)
           .location(path.posix.join(req.originalUrl, `/${recipe.recipename}`))
@@ -47,10 +47,10 @@ recipeRouter
   .all((req, res, next) => {
     const knexInstance = req.app.get("db");
     RecipeService.getByRecipename(knexInstance, req.params.recipe_id)
-      .then(recipe => {
+      .then((recipe) => {
         if (!recipe) {
           return res.status(404).json({
-            error: { message: "Recipe doesn't exist." }
+            error: { message: "Recipe doesn't exist." },
           });
         }
         res.recipe = recipe;
@@ -64,7 +64,7 @@ recipeRouter
   .delete((req, res, next) => {
     const knexInstance = req.app.get("db");
     RecipeService.deleteRecipe(knexInstance, req.params.recipe_id)
-      .then(numRowsAffected => {
+      .then((numRowsAffected) => {
         res.status(204).end();
       })
       .catch(next);
@@ -75,17 +75,16 @@ recipeRouter
     const recipeToUpdate = {
       recipename,
       recipephoto,
-      recipephoto,
       ingredients,
-      instructions
+      instructions,
     };
     const numberOfValues = Object.values(recipeToUpdate).filter(Boolean).length;
     if (numberOfValues === 0) {
       return res.status(400).json({
         error: {
           message:
-            "Request body must contain either recipename, recipephoto, ingredients, or instructions."
-        }
+            "Request body must contain either recipename, recipephoto, ingredients, or instructions.",
+        },
       });
     }
     RecipeService.updateRecipe(
@@ -93,7 +92,7 @@ recipeRouter
       req.params.recipe_id,
       recipeToUpdate
     )
-      .then(numRowsAffected => {
+      .then((numRowsAffected) => {
         res.status(204).end();
       })
       .catch(next);
