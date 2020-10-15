@@ -1,6 +1,6 @@
 # CookBook
 
-## Live app: https://cookbook-app.now.sh/
+## Live app: https://cookbook-client-bay.vercel.app/
 
 ### What is CookBook?
 
