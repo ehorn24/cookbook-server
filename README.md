@@ -1,7 +1,5 @@
 # CookBook
 
-## Live app: https://cookbook-client-bay.vercel.app/
-
 ### What is CookBook?
 
 CookBook was built to make your life easier in the kitchen. Create a profile and have access to thousands of other recipes from people just like you. Save recipes you've tried and loved, or save them to try later. Post your own recipe and share it with the world. Have your cookbook, and everyone else's, right in your hand.
